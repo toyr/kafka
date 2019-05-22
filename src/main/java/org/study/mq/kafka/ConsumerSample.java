@@ -26,6 +26,7 @@ public class ConsumerSample {
         properties.put("auto.commit.interval.ms", "1000");
         properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+//        properties.put("enable.auot.commit", "false"); // 关闭自动提交
 
         Consumer<String, String> consumer = new KafkaConsumer<String, String>(properties);
         consumer.subscribe(Arrays.asList(topic));
@@ -35,6 +36,14 @@ public class ConsumerSample {
                 System.out.printf("parition=%s, offset=%d, key=%s, value=%s%n",
                         record.partition(), record.offset(), record.key(), record.value());
             }
+            //异步提交
+            /*consumer.commitAsync(new OffsetCommitCallback() {
+                public void onComplete(Map<TopicPartition, OffsetAndMetadata> map, Exception e) {
+                    if (e != null) {
+                        System.out.println("消息提交出错，offset");
+                    }
+                }
+            });*/
         }
     }
 
